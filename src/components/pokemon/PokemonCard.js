@@ -81,7 +81,7 @@ export default class PokemonCard extends Component {
                     />
                     {this.state.toManyRequests ? (
                         <h6 className="mx-auto">
-                            <span className="badge badge-danger mt-2">To Many Requests</span>
+                            <span className="badge badge-danger mt-2">Too Many Requests</span>
                         </h6>
                     ) : null}
                     <div className="card-body mx-auto">
