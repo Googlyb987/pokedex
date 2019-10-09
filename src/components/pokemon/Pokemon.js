@@ -55,7 +55,15 @@ export default class Pokemon extends Component {
         const pokemonSpeciesUrl = `https://pokeapi.co/api/v2/pokemon-species/${pokemonIndex}/`;
 
         // Get Pokemon Information 
-        const pokemonRes = await axios.get(pokemonUrl);
+        let pokemonRes;
+        let currentMillis = Date.now;
+
+        if ((currentMillis - this.state.lastRequestTime) < 3600 ) {
+            pokemonRes = this.state.pokemonRes;
+        } else {
+            pokemonRes = await axios.get(pokemonUrl);
+            this.setState({pokemonRes, lastRequestTime : Date.now});
+        }
 
         const name = pokemonRes.data.name;
         const imageUrl = pokemonRes.data.sprites.front_default;
@@ -115,7 +123,7 @@ export default class Pokemon extends Component {
                 .toLowerCase()
                 .split('-')
                 .map(s => s.charAt(0).toUpperCase() + s.substring(1))
-                .join(' ')}`;    
+                .join(' ')}`;
         })
         .join(', ');
 

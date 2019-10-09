@@ -3,20 +3,24 @@ import axios from 'axios';
 import PokemonCard from './PokemonCard';
 
 export default class PokemonList extends Component {
-    state= {
-        url: "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=807", 
-        pokemon: null
+    state= { 
+        pokemon: []
     };
 
 async componentDidMount() {
-    const res = await axios.get(this.state.url);
-    this.setState({pokemon: res.data['results'] });
+    this.fetchResults()
 }
+    
+    fetchResults = async () => {
+        const res = await axios.get("https://pokeapi.co/api/v2/pokemon/?offset="+ this.state.pokemon.length +"&limit=50");
+    this.setState({pokemon: this.state.pokemon.concat(res.data['results'])});
+    } 
 
     render() {
         return (
             <React.Fragment>
                 {this.state.pokemon ? (
+                    <div>
                     <div className="row">
                         {this.state.pokemon.map(pokemon => (
                             <PokemonCard 
@@ -25,6 +29,10 @@ async componentDidMount() {
                                 url={pokemon.url}
                             />
                         ))}
+                    </div>
+                    {this.state.pokemon.length < 807 ? <div className="button"><button type="button" onClick={this.fetchResults} className="loadmorebutton">
+                        Load more Pokemon
+                    </button></div> : null}
                     </div>
                 ) : (
                     <h1> Loading Pokemon</h1>
